@@ -1,46 +1,71 @@
-# Getting Started with Create React App
+# Trading Calculator
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a simple trading calculator built with React and TypeScript, utilizing the Chakra UI library for styling. The calculator helps users to determine the Dollar-Cost Averaging (DCA) price, Stop Loss (SL) price, and Take Profit (TP) prices based on user inputs.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **DCA Price Calculation**: Calculates the average entry price based on multiple entry prices.
+- **Stop Loss Calculation**: Determines the stop loss price based on the DCA price and a user-defined percentage.
+- **Take Profit Calculation**: Calculates multiple take profit prices based on the DCA price, user-defined percentage, and fear/greed factors.
+- **Entry Prices Generation**: Generates entry prices between upper and lower price levels.
+- **Percentage Differences Calculation**: Computes the percentage differences of entry prices from the DCA price.
+- **Average Take Profit Calculation**: Calculates the average take profit price.
 
-### `yarn start`
+## Installation
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. Clone the repository:
+    ```sh
+    git clone https://github.com/yourusername/trading-calculator.git
+    ```
+2. Navigate to the project directory:
+    ```sh
+    cd trading-calculator
+    ```
+3. Install the dependencies:
+    ```sh
+    npm install
+    ```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Usage
 
-### `yarn test`
+1. Start the development server:
+    ```sh
+    npm start
+    ```
+2. Open your browser and navigate to `http://localhost:3000`.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Components
 
-### `yarn build`
+### `TradingCalc`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The main component that renders the trading calculator interface. It includes form controls for user inputs and displays the calculated results.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+#### State Variables
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- `upperPrice`: Upper price level for entry prices.
+- `lowerPrice`: Lower price level for entry prices.
+- `numOrders`: Number of orders.
+- `slPercentage`: Stop loss percentage from DCA price.
+- `tpPercentage`: Take profit percentage from DCA price.
+- `tpFearFactor`: Fear factor for take profit calculation.
+- `tpGreedFactor`: Greed factor for take profit calculation.
+- `entryPrices`: Array of generated entry prices.
+- `dcaPrice`: Calculated DCA price.
+- `slPrice`: Calculated stop loss price.
+- `tpPrices`: Array of calculated take profit prices.
+- `percentageDiffs`: Array of percentage differences from DCA price.
+- `averageTp`: Calculated average take profit price.
 
-### `yarn eject`
+## License
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Contributing
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Contributions are welcome! Please open an issue or submit a pull request for any changes or improvements.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Acknowledgements
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- [React](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Chakra UI](https://chakra-ui.com/)
