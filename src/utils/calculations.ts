@@ -45,6 +45,12 @@ export const calculateTpPrices = (
     algorithm: TpAlgorithm
 ): number[] => {
     const tpPrices = [];
+    if (numOrders === 1) {
+        const tpPercentage = (minTpPercentage + maxTpPercentage)/2;
+        tpPrices.push(isBuy ? dcaPrice * (1 + tpPercentage / 100) : dcaPrice * (1 - tpPercentage / 100));
+        return tpPrices;
+    }
+
     const step = (maxTpPercentage - minTpPercentage) / (numOrders - 1);
 
     for (let i = 0; i < numOrders; i++) {
@@ -101,6 +107,10 @@ export const calculateAverageTp = (tpPrices: number[]): number => {
  * @returns {number[]} - An array of generated entry prices.
  */
 export const generateEntryPrices = (upperPrice: number, lowerPrice: number, numOrders: number): number[] => {
+    if (numOrders === 1) {
+        return [(upperPrice + lowerPrice) / 2];
+    }
+
     const step = (upperPrice - lowerPrice) / (numOrders - 1);
     return Array.from({ length: numOrders }, (_, i) => upperPrice - i * step);
 };
