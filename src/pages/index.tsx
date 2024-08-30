@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, FormControl, FormLabel, NumberInput, NumberInputField, VStack, Text, HStack, Divider, Switch } from '@chakra-ui/react';
+import { Box, FormControl, FormLabel, NumberInput, NumberInputField, VStack, Text, HStack, Divider, Switch, Wrap, WrapItem } from '@chakra-ui/react';
 
 const DECIMALS = 3;
 const DECIMALS_PERCENTS = 2;
@@ -22,7 +22,6 @@ const calculateTpPrices = (dcaPrice: number, numOrders: number, minTpPercentage:
         const tpPercentage = minTpPercentage + i * step;
         tpPrices.push(isBuy ? dcaPrice * (1 + tpPercentage / 100) : dcaPrice * (1 - tpPercentage / 100));
     }
-    !isBuy && tpPrices.reverse();
     return tpPrices;
 };
 
@@ -56,21 +55,30 @@ const TradingCalc = () => {
     const [slPrice, setSlPrice] = useState<number>(0);
     const [tpPrices, setTpPrices] = useState<number[]>([]);
     const [percentageDiffs, setPercentageDiffs] = useState<number[]>([]);
+    const [tpPercentageDiffs, setTpPercentageDiffs] = useState<number[]>([]);
     const [averageTp, setAverageTp] = useState<number>(0);
+    const [averageTpDiff, setAverageTpDiff] = useState<number>(0);
 
     useEffect(() => {
         if (lowerPrice > upperPrice) {
             setLowerPrice(upperPrice);
         }
+        if (minTpPercentage > maxTpPercentage) {
+            setMinTpPercentage(maxTpPercentage);
+        }
         const prices = generateEntryPrices(upperPrice, lowerPrice, numOrders);
+        !isBuy && prices.reverse(); // Change orders order for sell
         setEntryPrices(prices);
         const dca = calculateDcaPrice(prices);
         setDcaPrice(dca);
         setSlPrice(calculateSlPrice(dca, slPercentage, isBuy));
         const tp = calculateTpPrices(dca, numOrders, minTpPercentage, maxTpPercentage, isBuy);
         setTpPrices(tp);
-        setAverageTp(calculateAverageTp(tp));
+        const avTp = calculateAverageTp(tp);
+        setAverageTp(avTp);
+        setAverageTpDiff((avTp-dca)*100/dca);
         setPercentageDiffs(calculatePercentageDiffs(prices, dca));
+        setTpPercentageDiffs(calculatePercentageDiffs(tp, dca));
     }, [upperPrice, lowerPrice, numOrders, slPercentage, minTpPercentage, maxTpPercentage, isBuy]);
 
     return (
@@ -88,37 +96,37 @@ const TradingCalc = () => {
                     </FormControl>
                     <FormControl>
                         <FormLabel>Upper Price Level</FormLabel>
-                        <NumberInput value={upperPrice} onChange={(valueString) => setUpperPrice(parseFloat(valueString))} step={0.01} precision={2}>
+                        <NumberInput value={upperPrice} onChange={(valueString) => setUpperPrice(parseFloat(valueString))} min={0} step={0.01} precision={2}>
                             <NumberInputField />
                         </NumberInput>
                     </FormControl>
                     <FormControl>
                         <FormLabel>Lower Price Level</FormLabel>
-                        <NumberInput value={lowerPrice} onChange={(valueString) => setLowerPrice(parseFloat(valueString))} step={0.01} precision={2}>
+                        <NumberInput value={lowerPrice} onChange={(valueString) => setLowerPrice(parseFloat(valueString))} min={0} step={0.01} precision={2}>
                             <NumberInputField />
                         </NumberInput>
                     </FormControl>
                     <FormControl>
                         <FormLabel>Number of Orders</FormLabel>
-                        <NumberInput value={numOrders} onChange={(valueString) => setNumOrders(parseInt(valueString))} step={1}>
+                        <NumberInput value={numOrders} onChange={(valueString) => setNumOrders(parseInt(valueString))} min={1} step={1}>
                             <NumberInputField />
                         </NumberInput>
                     </FormControl>
                     <FormControl>
                         <FormLabel>Stop Loss Percentage from DCA</FormLabel>
-                        <NumberInput value={slPercentage} onChange={(valueString) => setSlPercentage(parseFloat(valueString))} step={0.01} precision={2}>
+                        <NumberInput value={slPercentage} onChange={(valueString) => setSlPercentage(parseFloat(valueString))} min={0} step={0.01} precision={2}>
                             <NumberInputField />
                         </NumberInput>
                     </FormControl>
                     <FormControl>
                         <FormLabel>Minimum Take Profit Percentage from DCA</FormLabel>
-                        <NumberInput value={minTpPercentage} onChange={(valueString) => setMinTpPercentage(parseFloat(valueString))} step={0.01} precision={2}>
+                        <NumberInput value={minTpPercentage} onChange={(valueString) => setMinTpPercentage(parseFloat(valueString))} min={0} step={0.01} precision={2}>
                             <NumberInputField />
                         </NumberInput>
                     </FormControl>
                     <FormControl>
                         <FormLabel>Maximum Take Profit Percentage from DCA</FormLabel>
-                        <NumberInput value={maxTpPercentage} onChange={(valueString) => setMaxTpPercentage(parseFloat(valueString))} step={0.01} precision={2}>
+                        <NumberInput value={maxTpPercentage} onChange={(valueString) => setMaxTpPercentage(parseFloat(valueString))} min={0} step={0.01} precision={2}>
                             <NumberInputField />
                         </NumberInput>
                     </FormControl>
@@ -126,15 +134,19 @@ const TradingCalc = () => {
                 <Divider orientation="vertical" />
                 <VStack spacing={4} width="60%" align="start">
                     <Text>Average DCA Price: {dcaPrice.toFixed(DECIMALS)}</Text>
-                    <Text>Average TP Value: {averageTp.toFixed(DECIMALS)} ({((averageTp-dcaPrice)*100/dcaPrice).toFixed(DECIMALS_PERCENTS)}%)</Text>
+                    <Text>Average TP Value: {averageTp.toFixed(DECIMALS)} (DCA {averageTpDiff >= 0 ? '+' : ''}{averageTpDiff.toFixed(DECIMALS_PERCENTS)}%)</Text>
                     <Text>Stop Loss (SL) Level: {slPrice.toFixed(DECIMALS)}</Text>
-                    {entryPrices.map((price, index) => (
-                        <Box key={index} p={2} borderWidth="1px" borderRadius="lg" width="100%">
-                            <Text>Order {index + 1}:</Text>
-                            <Text>Entry Price: {price.toFixed(DECIMALS)} (DCA {percentageDiffs[index] >= 0 ? '+' : ''}{percentageDiffs[index].toFixed(DECIMALS_PERCENTS)}%)</Text>
-                            <Text>TP Level: {tpPrices[index].toFixed(DECIMALS)}</Text>
-                        </Box>
-                    ))}
+                    <Wrap spacing={4}>
+                        {entryPrices.map((price, index) => (
+                            <WrapItem key={index}>
+                                <Box p={2} borderWidth="1px" borderRadius="lg" width="100%">
+                                    <Text>Order {index + 1}:</Text>
+                                    <Text>Entry Price: {price.toFixed(DECIMALS)} (DCA {percentageDiffs[index] >= 0 ? '+' : ''}{percentageDiffs[index].toFixed(DECIMALS_PERCENTS)}%)</Text>
+                                    <Text>TP Level: {tpPrices[index].toFixed(DECIMALS)} (DCA {tpPercentageDiffs[index] >= 0 ? '+' : ''}{tpPercentageDiffs[index].toFixed(DECIMALS_PERCENTS)}%)</Text>
+                                </Box>
+                            </WrapItem>
+                        ))}
+                    </Wrap>
                 </VStack>
             </HStack>
         </Box>
