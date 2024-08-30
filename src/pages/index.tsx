@@ -119,14 +119,14 @@ const TradingCalc = () => {
                         </NumberInput>
                     </FormControl>
                     <FormControl>
-                        <FormLabel>Minimum Take Profit Percentage from DCA</FormLabel>
-                        <NumberInput value={minTpPercentage} onChange={(valueString) => setMinTpPercentage(parseFloat(valueString))} min={0} step={0.01} precision={2}>
+                        <FormLabel>Maximum Take Profit Percentage from DCA</FormLabel>
+                        <NumberInput value={maxTpPercentage} onChange={(valueString) => setMaxTpPercentage(parseFloat(valueString))} min={0} step={0.01} precision={2}>
                             <NumberInputField />
                         </NumberInput>
                     </FormControl>
                     <FormControl>
-                        <FormLabel>Maximum Take Profit Percentage from DCA</FormLabel>
-                        <NumberInput value={maxTpPercentage} onChange={(valueString) => setMaxTpPercentage(parseFloat(valueString))} min={0} step={0.01} precision={2}>
+                        <FormLabel>Minimum Take Profit Percentage from DCA</FormLabel>
+                        <NumberInput value={minTpPercentage} onChange={(valueString) => setMinTpPercentage(parseFloat(valueString))} min={0} step={0.01} precision={2}>
                             <NumberInputField />
                         </NumberInput>
                     </FormControl>
