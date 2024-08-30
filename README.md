@@ -2,6 +2,8 @@
 
 This project is a simple trading calculator built with React and TypeScript, utilizing the Chakra UI library for styling. The calculator helps users to determine the Dollar-Cost Averaging (DCA) price, Stop Loss (SL) price, and Take Profit (TP) prices based on user inputs.
 
+**Current version is available at [https://odubinkin.github.io/trading-calc/](https://odubinkin.github.io/trading-calc/).**
+
 ## Features
 
 - **DCA Price Calculation**: Calculates the average entry price based on multiple entry prices.
