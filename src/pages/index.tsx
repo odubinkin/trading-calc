@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, FormControl, FormLabel, NumberInput, NumberInputField, VStack, Text, HStack, Divider, Switch, Wrap, WrapItem, Select } from '@chakra-ui/react';
+import { Box, FormControl, FormLabel, NumberInput, NumberInputField, VStack, Text, Divider, Switch, Wrap, WrapItem, Select, Stack, useBreakpointValue } from '@chakra-ui/react';
 
 const DECIMALS = 3;
 const DECIMALS_PERCENTS = 2;
@@ -102,10 +102,12 @@ const TradingCalc = () => {
         setTpPercentageDiffs(calculatePercentageDiffs(tp, dca));
     }, [upperPrice, lowerPrice, numOrders, slPercentage, minTpPercentage, maxTpPercentage, isBuy, tpAlgorithm]);
 
+    const isMobile = useBreakpointValue({ base: true, md: false });
+
     return (
         <Box p={5}>
-            <HStack spacing={10} align="start">
-                <VStack spacing={4} width="40%">
+            <Stack direction={{ base: 'column', md: 'row' }} spacing={10} align="start">
+                <VStack spacing={4} width={{ base: '100%', md: '40%' }}>
                     <FormControl display="flex" alignItems="center">
                         <FormLabel htmlFor="buy-sell-switch" mb="0" color={!isBuy ? 'green' : 'black'}>
                             Sell
@@ -161,8 +163,8 @@ const TradingCalc = () => {
                         </Select>
                     </FormControl>
                 </VStack>
-                <Divider orientation="vertical" />
-                <VStack spacing={4} width="60%" align="start">
+                <Divider orientation={ isMobile ? 'horizontal' : 'vertical' } />
+                <VStack spacing={4} width={{ base: '100%', md: '60%' }} align="start">
                     <Text>Average DCA Price: {dcaPrice.toFixed(DECIMALS)}</Text>
                     <Text>Average TP Value: {averageTp.toFixed(DECIMALS)} (DCA {averageTpDiff >= 0 ? '+' : ''}{averageTpDiff.toFixed(DECIMALS_PERCENTS)}%)</Text>
                     <Text>Stop Loss (SL) Level: {slPrice.toFixed(DECIMALS)}</Text>
@@ -178,7 +180,7 @@ const TradingCalc = () => {
                         ))}
                     </Wrap>
                 </VStack>
-            </HStack>
+            </Stack>
         </Box>
     );
 };
