@@ -6,7 +6,7 @@ This project is a simple trading calculator built with React and TypeScript, uti
 
 - **DCA Price Calculation**: Calculates the average entry price based on multiple entry prices.
 - **Stop Loss Calculation**: Determines the stop loss price based on the DCA price and a user-defined percentage.
-- **Take Profit Calculation**: Calculates multiple take profit prices based on the DCA price, user-defined percentage, and fear/greed factors.
+- **Take Profit Calculation**: Calculates multiple take profit prices based on the DCA price, user-defined percentage, and selected algorithm.
 - **Entry Prices Generation**: Generates entry prices between upper and lower price levels.
 - **Percentage Differences Calculation**: Computes the percentage differences of entry prices from the DCA price.
 - **Average Take Profit Calculation**: Calculates the average take profit price.
@@ -46,15 +46,18 @@ The main component that renders the trading calculator interface. It includes fo
 - `lowerPrice`: Lower price level for entry prices.
 - `numOrders`: Number of orders.
 - `slPercentage`: Stop loss percentage from DCA price.
-- `tpPercentage`: Take profit percentage from DCA price.
-- `tpFearFactor`: Fear factor for take profit calculation.
-- `tpGreedFactor`: Greed factor for take profit calculation.
+- `minTpPercentage`: Minimum take profit percentage from DCA price.
+- `maxTpPercentage`: Maximum take profit percentage from DCA price.
+- `isBuy`: Boolean indicating if the calculation is for a buy or sell order.
+- `tpAlgorithm`: Algorithm used for take profit calculation (linear, exponential, fibonacci, logarithmic).
 - `entryPrices`: Array of generated entry prices.
 - `dcaPrice`: Calculated DCA price.
 - `slPrice`: Calculated stop loss price.
 - `tpPrices`: Array of calculated take profit prices.
 - `percentageDiffs`: Array of percentage differences from DCA price.
+- `tpPercentageDiffs`: Array of percentage differences of TP prices from DCA price.
 - `averageTp`: Calculated average take profit price.
+- `averageTpDiff`: Percentage difference of average TP price from DCA price.
 
 ## License
 
