@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Box, FormControl, FormLabel, NumberInput, NumberInputField, VStack, Text, HStack, Divider, Switch, Wrap, WrapItem } from '@chakra-ui/react';
+import { Box, FormControl, FormLabel, NumberInput, NumberInputField, VStack, Text, HStack, Divider, Switch, Wrap, WrapItem, Select } from '@chakra-ui/react';
 
 const DECIMALS = 3;
 const DECIMALS_PERCENTS = 2;
+
+type TpAlgorithm = 'linear' | 'exponential' | 'fibonacci' | 'logarithmic';
 
 // Function to calculate the DCA (Dollar-Cost Averaging) price
 const calculateDcaPrice = (entryPrices: number[]) => {
@@ -14,12 +16,30 @@ const calculateSlPrice = (dcaPrice: number, slPercentage: number, isBuy: boolean
     return isBuy ? dcaPrice * (1 - slPercentage / 100) : dcaPrice * (1 + slPercentage / 100);
 };
 
-// Function to calculate the Take Profit (TP) prices
-const calculateTpPrices = (dcaPrice: number, numOrders: number, minTpPercentage: number, maxTpPercentage: number, isBuy: boolean) => {
+// Function to calculate the Take Profit (TP) prices based on the selected algorithm
+const calculateTpPrices = (dcaPrice: number, numOrders: number, minTpPercentage: number, maxTpPercentage: number, isBuy: boolean, algorithm: TpAlgorithm) => {
     const tpPrices = [];
     const step = (maxTpPercentage - minTpPercentage) / (numOrders - 1);
+
     for (let i = 0; i < numOrders; i++) {
-        const tpPercentage = minTpPercentage + i * step;
+        let tpPercentage;
+        switch (algorithm) {
+            case 'exponential':
+                tpPercentage = minTpPercentage * Math.pow(maxTpPercentage / minTpPercentage, i / (numOrders - 1));
+                break;
+            case 'fibonacci':
+                const fib = [0, 1];
+                for (let j = 2; j <= numOrders; j++) fib[j] = fib[j - 1] + fib[j - 2];
+                tpPercentage = minTpPercentage + (maxTpPercentage - minTpPercentage) * (fib[i] / fib[numOrders - 1]);
+                break;
+            case 'logarithmic':
+                tpPercentage = minTpPercentage + (Math.log(i + 1) / Math.log(numOrders)) * (maxTpPercentage - minTpPercentage);
+                break;
+            case 'linear':
+            default:
+                tpPercentage = minTpPercentage + i * step;
+                break;
+        }
         tpPrices.push(isBuy ? dcaPrice * (1 + tpPercentage / 100) : dcaPrice * (1 - tpPercentage / 100));
     }
     return tpPrices;
@@ -49,6 +69,7 @@ const TradingCalc = () => {
     const [minTpPercentage, setMinTpPercentage] = useState<number>(1.5);
     const [maxTpPercentage, setMaxTpPercentage] = useState<number>(8.5);
     const [isBuy, setIsBuy] = useState<boolean>(true);
+    const [tpAlgorithm, setTpAlgorithm] = useState<TpAlgorithm>('exponential');
 
     const [entryPrices, setEntryPrices] = useState<number[]>([]);
     const [dcaPrice, setDcaPrice] = useState<number>(0);
@@ -72,14 +93,14 @@ const TradingCalc = () => {
         const dca = calculateDcaPrice(prices);
         setDcaPrice(dca);
         setSlPrice(calculateSlPrice(dca, slPercentage, isBuy));
-        const tp = calculateTpPrices(dca, numOrders, minTpPercentage, maxTpPercentage, isBuy);
+        const tp = calculateTpPrices(dca, numOrders, minTpPercentage, maxTpPercentage, isBuy, tpAlgorithm);
         setTpPrices(tp);
         const avTp = calculateAverageTp(tp);
         setAverageTp(avTp);
         setAverageTpDiff((avTp-dca)*100/dca);
         setPercentageDiffs(calculatePercentageDiffs(prices, dca));
         setTpPercentageDiffs(calculatePercentageDiffs(tp, dca));
-    }, [upperPrice, lowerPrice, numOrders, slPercentage, minTpPercentage, maxTpPercentage, isBuy]);
+    }, [upperPrice, lowerPrice, numOrders, slPercentage, minTpPercentage, maxTpPercentage, isBuy, tpAlgorithm]);
 
     return (
         <Box p={5}>
@@ -129,6 +150,15 @@ const TradingCalc = () => {
                         <NumberInput value={minTpPercentage} onChange={(valueString) => setMinTpPercentage(parseFloat(valueString))} min={0} step={0.01} precision={2}>
                             <NumberInputField />
                         </NumberInput>
+                    </FormControl>
+                    <FormControl>
+                        <FormLabel>TP Calculation Algorithm</FormLabel>
+                        <Select value={tpAlgorithm} onChange={(e) => setTpAlgorithm(e.target.value as TpAlgorithm)}>
+                            <option value="linear">Linear</option>
+                            <option value="exponential">Exponential</option>
+                            <option value="fibonacci">Fibonacci</option>
+                            <option value="logarithmic">Logarithmic</option>
+                        </Select>
                     </FormControl>
                 </VStack>
                 <Divider orientation="vertical" />
