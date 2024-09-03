@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
-import { ChakraProvider } from '@chakra-ui/react';
 import React from 'react';
 
 // Mock matchMedia
