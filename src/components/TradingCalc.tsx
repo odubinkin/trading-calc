@@ -57,6 +57,33 @@ const TradingCalc = () => {
 
     const isMobile = useBreakpointValue({ base: true, md: false });
 
+    const handleChangeDecimal = (value: string, minValue: number, setter: (value: Decimal) => void) => {
+        const decimalMinValue = new Decimal(minValue);
+        if (!value || value === '') {
+            setter(decimalMinValue);
+            return;
+        }
+        const decimalValue = new Decimal(value);
+        if (decimalValue.lessThan(decimalMinValue)) {
+            setter(decimalMinValue);
+        } else {
+            setter(decimalValue);
+        }
+    };
+
+    const handleChangeNumber = (value: string, minValue: number, setter: (value: number) => void) => {
+        if (!value || value === '') {
+            setter(minValue);
+            return;
+        }
+        const numberValue = parseInt(value);
+        if (numberValue < minValue) {
+            setter(minValue);
+        } else {
+            setter(numberValue);
+        }
+    };
+
     return (
         <Box data-testid="trading-calc" p={5}>
             <Stack direction={{ base: 'column', md: 'row' }} spacing={10} align="start">
@@ -72,37 +99,67 @@ const TradingCalc = () => {
                     </FormControl>
                     <FormControl>
                         <FormLabel>Upper Price Level</FormLabel>
-                        <NumberInput value={upperPrice.toString()} onChange={(valueString) => setUpperPrice(new Decimal(valueString))} min={0} step={0.01}>
+                        <NumberInput 
+                            value={upperPrice.toString()} 
+                            onChange={(valueString) => handleChangeDecimal(valueString, 0, setUpperPrice)} 
+                            min={0} 
+                            step={0.01}
+                        >
                             <NumberInputField />
                         </NumberInput>
                     </FormControl>
                     <FormControl>
                         <FormLabel>Lower Price Level</FormLabel>
-                        <NumberInput value={lowerPrice.toString()} onChange={(valueString) => setLowerPrice(new Decimal(valueString))} min={0} step={0.01}>
+                        <NumberInput 
+                            value={lowerPrice.toString()} 
+                            onChange={(valueString) => handleChangeDecimal(valueString, 0, setLowerPrice)} 
+                            min={0} 
+                            step={0.01}
+                        >
                             <NumberInputField />
                         </NumberInput>
                     </FormControl>
                     <FormControl>
                         <FormLabel>Number of Orders</FormLabel>
-                        <NumberInput value={numOrders} onChange={(valueString) => setNumOrders(parseInt(valueString))} min={1} step={1}>
+                        <NumberInput 
+                            value={numOrders} 
+                            onChange={(valueString) => handleChangeNumber(valueString, 1, setNumOrders)} 
+                            min={1} 
+                            step={1}
+                        >
                             <NumberInputField />
                         </NumberInput>
                     </FormControl>
                     <FormControl>
                         <FormLabel>Stop Loss Percentage from DCA</FormLabel>
-                        <NumberInput value={slPercentage.toString()} onChange={(valueString) => setSlPercentage(new Decimal(valueString))} min={0} step={0.01}>
+                        <NumberInput 
+                            value={slPercentage.toString()} 
+                            onChange={(valueString) => handleChangeDecimal(valueString, 0, setSlPercentage)} 
+                            min={0} 
+                            step={0.01}
+                        >
                             <NumberInputField />
                         </NumberInput>
                     </FormControl>
                     <FormControl>
                         <FormLabel>Maximum Take Profit Percentage from DCA</FormLabel>
-                        <NumberInput value={maxTpPercentage.toString()} onChange={(valueString) => setMaxTpPercentage(new Decimal(valueString))} min={0} step={0.01}>
+                        <NumberInput 
+                            value={maxTpPercentage.toString()} 
+                            onChange={(valueString) => handleChangeDecimal(valueString, 0, setMaxTpPercentage)} 
+                            min={0} 
+                            step={0.01}
+                        >
                             <NumberInputField />
                         </NumberInput>
                     </FormControl>
                     <FormControl>
                         <FormLabel>Minimum Take Profit Percentage from DCA</FormLabel>
-                        <NumberInput value={minTpPercentage.toString()} onChange={(valueString) => setMinTpPercentage(new Decimal(valueString))} min={0} step={0.01}>
+                        <NumberInput 
+                            value={minTpPercentage.toString()} 
+                            onChange={(valueString) => handleChangeDecimal(valueString, 0, setMinTpPercentage)} 
+                            min={0} 
+                            step={0.01}
+                        >
                             <NumberInputField />
                         </NumberInput>
                     </FormControl>
