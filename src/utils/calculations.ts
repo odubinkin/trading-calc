@@ -67,8 +67,11 @@ export const calculateTpPrices = (
                 break;
             case 'fibonacci':
                 const fib = [new Decimal(0), new Decimal(1)];
-                for (let j = 2; j <= numOrders; j++) fib[j] = fib[j - 1].plus(fib[j - 2]);
-                tpPercentage = minTpPercentage.plus(maxTpPercentage.minus(minTpPercentage).times(fib[i].div(fib[numOrders - 1])));
+                for (let j = 2; j < numOrders; j++) {
+                    fib[j] = fib[j - 1].plus(fib[j - 2]);
+                }
+                const fibSum = fib.reduce((a, b) => a.plus(b), new Decimal(0));
+                tpPercentage = minTpPercentage.plus(maxTpPercentage.minus(minTpPercentage).times(fib[i].div(fibSum)));
                 break;
             case 'logarithmic':
                 tpPercentage = minTpPercentage.plus(new Decimal(Math.log(i + 1)).div(Math.log(numOrders)).times(maxTpPercentage.minus(minTpPercentage)));
