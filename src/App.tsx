@@ -1,10 +1,11 @@
-import TradingCalc from './pages';
+import { ChakraProvider } from '@chakra-ui/react';
+import TradingCalc from './components/TradingCalc';
 
 const App: React.FC = () => {
     return (
-        <div>
-           <TradingCalc />
-        </div>
+        <ChakraProvider>
+            <TradingCalc />
+        </ChakraProvider>
     );
 };
 
