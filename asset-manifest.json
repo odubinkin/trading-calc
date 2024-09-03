@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.js": "/trading-calc/static/js/main.7c3b80dd.js",
+    "main.js": "/trading-calc/static/js/main.5320cf2a.js",
     "static/js/453.83fa62cb.chunk.js": "/trading-calc/static/js/453.83fa62cb.chunk.js",
     "index.html": "/trading-calc/index.html",
-    "main.7c3b80dd.js.map": "/trading-calc/static/js/main.7c3b80dd.js.map",
+    "main.5320cf2a.js.map": "/trading-calc/static/js/main.5320cf2a.js.map",
     "453.83fa62cb.chunk.js.map": "/trading-calc/static/js/453.83fa62cb.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.7c3b80dd.js"
+    "static/js/main.5320cf2a.js"
   ]
 }
