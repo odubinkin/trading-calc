@@ -12,6 +12,9 @@ export type TpAlgorithm = 'linear' | 'exponential' | 'fibonacci' | 'logarithmic'
  * @returns {Decimal} - The calculated DCA price.
  */
 export const calculateDcaPrice = (entryPrices: Decimal[]): Decimal => {
+    if (entryPrices.length === 0) {
+        throw new Error("Empty array provided");
+    }
     const total = entryPrices.reduce((a, b) => a.plus(b), new Decimal(0));
     return total.div(entryPrices.length);
 };
@@ -51,7 +54,7 @@ export const calculateTpPrices = (
     const tpPrices = [];
 
     if (numOrders === 1) {
-        const tpPercentage = minTpPercentage.plus(maxTpPercentage).div(2);
+        const tpPercentage = (minTpPercentage.plus(maxTpPercentage)).div(2);
         tpPrices.push(isBuy ? dcaPrice.times(new Decimal(1).plus(tpPercentage.div(100))) : dcaPrice.times(new Decimal(1).minus(tpPercentage.div(100))));
         return tpPrices;
     }
@@ -104,6 +107,9 @@ export const calculatePercentageDiffs = (entryPrices: Decimal[], dcaPrice: Decim
  * @returns {Decimal} - The calculated average TP price.
  */
 export const calculateAverageTp = (tpPrices: Decimal[]): Decimal => {
+    if (tpPrices.length === 0) {
+        throw new Error("Empty array provided");
+    }
     const total = tpPrices.reduce((a, b) => a.plus(b), new Decimal(0));
     return total.div(tpPrices.length);
 };
