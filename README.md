@@ -51,7 +51,7 @@ The main component that renders the trading calculator interface. It includes fo
 - `minTpPercentage`: Minimum take profit percentage from DCA price.
 - `maxTpPercentage`: Maximum take profit percentage from DCA price.
 - `isBuy`: Boolean indicating if the calculation is for a buy or sell order.
-- `tpAlgorithm`: Algorithm used for take profit calculation (linear, exponential, fibonacci, logarithmic).
+- `tpAlgorithm`: Algorithm used for take profit calculation (linear, exponential, logarithmic).
 - `entryPrices`: Array of generated entry prices.
 - `dcaPrice`: Calculated DCA price.
 - `slPrice`: Calculated stop loss price.
