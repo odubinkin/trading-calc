@@ -3,7 +3,7 @@ import Decimal from 'decimal.js-light';
 /**
  * Type representing the available algorithms for calculating Take Profit (TP) prices.
  */
-export type TpAlgorithm = 'linear' | 'exponential' | 'fibonacci' | 'logarithmic';
+export type TpAlgorithm = 'linear' | 'exponential' | 'logarithmic';
 
 /**
  * Calculates the Dollar-Cost Averaging (DCA) price.
@@ -67,14 +67,6 @@ export const calculateTpPrices = (
             case 'exponential':
                 const exp = (maxTpPercentage.div(minTpPercentage)).pow(i / (numOrders - 1));
                 tpPercentage = minTpPercentage.times(exp);
-                break;
-            case 'fibonacci':
-                const fib = [new Decimal(0), new Decimal(1)];
-                for (let j = 2; j < numOrders; j++) {
-                    fib[j] = fib[j - 1].plus(fib[j - 2]);
-                }
-                const fibSum = fib.reduce((a, b) => a.plus(b), new Decimal(0));
-                tpPercentage = minTpPercentage.plus(maxTpPercentage.minus(minTpPercentage).times(fib[i].div(fibSum)));
                 break;
             case 'logarithmic':
                 tpPercentage = minTpPercentage.plus(new Decimal(Math.log(i + 1)).div(Math.log(numOrders)).times(maxTpPercentage.minus(minTpPercentage)));

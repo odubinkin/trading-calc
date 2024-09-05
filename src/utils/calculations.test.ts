@@ -54,17 +54,6 @@ describe('Calculations Utils', () => {
         expect(result.map(price => price.toNumber())).toEqual([220, 234.64101615137756, 260]);
     });
 
-    // test('calculateTpPrices should return correct TP prices for fibonacci algorithm', () => {
-    //     const dcaPrice = new Decimal(200);
-    //     const numOrders = 3;
-    //     const minTpPercentage = new Decimal(10);
-    //     const maxTpPercentage = new Decimal(30);
-    //     const isBuy = true;
-    //     const algorithm: TpAlgorithm = 'fibonacci';
-    //     const result = calculateTpPrices(dcaPrice, numOrders, minTpPercentage, maxTpPercentage, isBuy, algorithm);
-    //     expect(result.map(price => price.toNumber())).toEqual([220, 230, 260]);
-    // });
-
     test('calculateTpPrices should return correct TP prices for logarithmic algorithm', () => {
         const dcaPrice = new Decimal(200);
         const numOrders = 3;

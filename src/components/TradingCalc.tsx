@@ -168,7 +168,6 @@ const TradingCalc = () => {
                         <Select value={tpAlgorithm} onChange={(e) => setTpAlgorithm(e.target.value as TpAlgorithm)}>
                             <option value="linear">Linear</option>
                             <option value="exponential">Exponential</option>
-                            <option value="fibonacci">Fibonacci</option>
                             <option value="logarithmic">Logarithmic</option>
                         </Select>
                     </FormControl>
